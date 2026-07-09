@@ -113,9 +113,11 @@ Expected:
 - [ ] `tlp` service is active.
 - [ ] AC plug/unplug triggers refresh profile switch.
 - [ ] No errors from `hypr-refresh.service`.
+- [ ] Connecting an HDMI display mirrors the laptop panel.
 
 Expected:
 - Service runs cleanly and monitor refresh changes as configured. If auto switching fails, verify manual switch with `/usr/local/bin/hypr-refresh.sh`.
+- HDMI-connected displays should clone the internal screen by default.
 
 ---
 

@@ -252,11 +252,48 @@ backup_and_copy() {
   rsync ${RSYNC_FLAGS} "$CONFIG_SRC/$name/" "$target/"
 }
 
+configure_hyprland_monitors() {
+  local hyprland_conf="$HOME/.config/hypr/hyprland.conf"
+  local temp_file
+
+  [[ -f "$hyprland_conf" ]] || return
+
+  temp_file=$(mktemp)
+  awk \
+    -v monitor_rule="monitor=${MONITOR_NAME},${MONITOR_RESOLUTION}@${MONITOR_REFRESH_AC},0x0,1" \
+    -v mirror_rule="monitor=,preferred,auto,1,mirror,${MONITOR_NAME}" '
+    BEGIN {
+      updated = 0
+    }
+
+    /^monitor=/ && updated == 0 {
+      print monitor_rule
+      print mirror_rule
+      updated = 1
+      next
+    }
+
+    {
+      print
+    }
+
+    END {
+      if (updated == 0) {
+        print monitor_rule
+        print mirror_rule
+      }
+    }
+  ' "$hyprland_conf" > "$temp_file"
+  mv "$temp_file" "$hyprland_conf"
+}
+
 info "Deploying configuration files (backups go to $BACKUP_ROOT if needed)"
 mkdir -p "$HOME/.config"
 for dir in hypr kitty matugen rofi waybar mako swappy; do
   backup_and_copy "$dir"
 done
+
+configure_hyprland_monitors
 
 info "Installing wallgen helper"
 mkdir -p "$HOME/.local/bin"

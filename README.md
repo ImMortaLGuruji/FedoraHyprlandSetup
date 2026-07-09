@@ -74,6 +74,10 @@ Configurable:
 * `MONITOR_REFRESH_BAT`
 * `MONITOR_REFRESH_AC`
 
+The default Hyprland setup keeps the laptop panel explicit and mirrors any
+extra connected display, so HDMI outputs clone the main screen instead of
+creating a separate extended desktop.
+
 ### Network
 
 Waybar defaults to `wlp4s0` (change if your Wi-Fi interface differs).
